@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Link } from 'react-router';
 import { Seo } from '../components/Seo';
 import { Hero } from '../components/sections/Hero';
@@ -10,6 +10,37 @@ import { DesignCard } from '../components/DesignCard';
 import { featured, studio, materialsLine, finishes } from '../data/content';
 import { organization } from '../data/seo';
 import { useCountUp } from '../motion/useCountUp';
+
+/**
+ * Featured designs. Phones: a swipe row (cards 80% of the screen wide, snapping) with a "1 / 8" counter.
+ * From 640px: a grid, two then four across.
+ */
+function FeaturedRow() {
+  const [at, setAt] = useState(1);
+  const onScroll = (e) => {
+    const el = e.currentTarget;
+    const card = el.firstElementChild?.getBoundingClientRect().width || 1;
+    setAt(Math.min(featured.length, Math.round(el.scrollLeft / (card + 16)) + 1));
+  };
+  return (
+    <>
+      <ul
+        onScroll={onScroll}
+        className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-5 px-5 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-4"
+        data-reveal="stagger"
+      >
+        {featured.map((d) => (
+          <li key={d.code} className="w-[80%] shrink-0 snap-start sm:w-auto">
+            <DesignCard d={d} sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 80vw" />
+          </li>
+        ))}
+      </ul>
+      <p className="mt-6 text-xs text-paper/50 tabular-nums sm:hidden" aria-hidden="true">
+        {String(at).padStart(2, '0')} / {String(featured.length).padStart(2, '0')} · swipe for more
+      </p>
+    </>
+  );
+}
 
 export default function Home() {
   const stats = useRef(null);
@@ -36,24 +67,18 @@ export default function Home() {
                 Every piece starts as <span className="italic">a drawing.</span>
               </h2>
             </div>
-            <Link to="/sculptures" className="group flex items-center gap-3 text-sm font-semibold">
+            <Link to="/sculptures" className="group flex min-h-11 items-center gap-3 text-sm font-semibold">
               <span className="border-b border-current pb-1">View the sculpture collection</span>
               <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
             </Link>
           </div>
-          <ul className="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-4" data-reveal="stagger">
-            {featured.map((d) => (
-              <li key={d.code}>
-                <DesignCard d={d} />
-              </li>
-            ))}
-          </ul>
+          <FeaturedRow />
         </div>
       </section>
 
       {/* Studio */}
       <section className="py-24 md:py-32">
-        <div className="mx-auto grid max-w-[1400px] gap-14 px-5 md:px-10 lg:grid-cols-[1.1fr_1fr]">
+        <div className="mx-auto grid max-w-[1400px] grid-cols-[minmax(0,1fr)] gap-14 px-5 md:px-10 lg:grid-cols-[1.1fr_1fr]">
           <div data-reveal="up">
             <p className="label text-bronze">{studio.eyebrow}</p>
             <h2 className="mt-4 font-display text-[clamp(2.4rem,5vw,4.4rem)] leading-[1.02] font-light">
@@ -68,9 +93,9 @@ export default function Home() {
           <div className="lg:col-span-2" data-reveal="up">
             <dl ref={stats} className="grid grid-cols-3 border-t border-ink/15">
               {studio.stats.map((s) => (
-                <div key={s.label} className="flex flex-col-reverse border-r border-ink/15 py-8 pr-4 last:border-r-0 [&:not(:first-child)]:pl-4 md:[&:not(:first-child)]:pl-8">
-                  <dt className="label mt-3 text-stone">{s.label}</dt>
-                  <dd className="font-display text-[clamp(2.6rem,6vw,5rem)] leading-none font-light [font-variant-numeric:lining-nums]">
+                <div key={s.label} className="flex min-w-0 flex-col-reverse border-r border-ink/15 py-8 pr-3 last:border-r-0 sm:pr-4 [&:not(:first-child)]:pl-3 sm:[&:not(:first-child)]:pl-4 md:[&:not(:first-child)]:pl-8">
+                  <dt className="label mt-3 text-stone max-sm:text-[0.62rem] max-sm:tracking-[0.12em]">{s.label}</dt>
+                  <dd className="font-display text-[clamp(1.75rem,11vw,5rem)] leading-none font-light [font-variant-numeric:lining-nums] sm:text-[clamp(2.6rem,6vw,5rem)]">
                     <span data-count={s.value}>{s.value}</span>
                     <span className="text-bronze">+</span>
                   </dd>

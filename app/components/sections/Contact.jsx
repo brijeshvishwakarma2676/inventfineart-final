@@ -9,7 +9,7 @@ export function Contact() {
   ];
   return (
     <section id="contact" className="scroll-mt-20 bg-paper-2 py-24 md:py-32">
-      <div className="mx-auto grid max-w-[1400px] gap-12 px-5 md:px-10 lg:grid-cols-[1.3fr_1fr] lg:items-end">
+      <div className="mx-auto grid max-w-[1400px] grid-cols-[minmax(0,1fr)] gap-12 px-5 md:px-10 lg:grid-cols-[1.3fr_1fr] lg:items-end">
         <div data-reveal="up">
           <p className="label text-bronze">Get a quote</p>
           <h2 className="mt-5 font-display text-[clamp(2.6rem,6vw,5.4rem)] leading-[1] font-light">
@@ -25,11 +25,11 @@ export function Contact() {
               key={l.href}
               href={l.href}
               {...(l.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-              className={`group flex items-center justify-between rounded-full px-7 py-5 transition-colors ${
+              className={`group flex min-w-0 items-center justify-between gap-3 rounded-full px-5 py-5 transition-colors sm:px-7 ${
                 l.primary ? 'bg-ink text-paper hover:bg-bronze' : 'border border-ink/20 hover:border-ink'
               }`}
             >
-              <span className="truncate font-semibold">{l.label}</span>
+              <span className="min-w-0 truncate font-semibold">{l.label}</span>
               <span className="transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">
                 →
               </span>

@@ -82,7 +82,7 @@ export function Header() {
       className={`fixed inset-x-0 top-0 z-50 bg-ink/95 text-paper backdrop-blur transition-transform duration-500 ease-[var(--ease-out-soft)] ${hidden && !open ? '-translate-y-full' : ''}`}
     >
       <div className="mx-auto flex h-[72px] max-w-[1400px] items-center justify-between px-5 md:px-10">
-        <Link to="/" aria-label="Invent Fine Art, home">
+        <Link to="/" aria-label="Invent Fine Art, home" className="flex min-h-11 items-center">
           <Logo />
         </Link>
         <nav aria-label="Main" className="hidden h-full items-center gap-9 text-[0.82rem] font-medium tracking-wide lg:flex">
@@ -159,13 +159,14 @@ export function Header() {
             href={quoteLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden rounded-full bg-bronze px-5 py-2.5 text-[0.8rem] font-semibold tracking-wide text-white transition-colors hover:bg-bronze-2 sm:inline-block"
+            className="hidden min-h-11 items-center rounded-full bg-bronze px-4 text-[0.8rem] font-semibold tracking-wide text-white transition-colors hover:bg-bronze-2 min-[360px]:inline-flex sm:px-5"
           >
-            Get a Quote
+            <span className="sm:hidden">Quote</span>
+            <span className="hidden sm:inline">Get a Quote</span>
           </a>
-          <button type="button" className="relative h-10 w-10 lg:hidden" aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open} onClick={() => setOpen((o) => !o)}>
-            <span className={`absolute left-2 right-2 h-px bg-current transition-transform duration-300 ${open ? 'top-[19px] rotate-45' : 'top-[15px]'}`} />
-            <span className={`absolute left-2 right-2 h-px bg-current transition-transform duration-300 ${open ? 'top-[19px] -rotate-45' : 'top-[24px]'}`} />
+          <button type="button" className="relative -mr-1 h-11 w-11 lg:hidden" aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open} onClick={() => setOpen((o) => !o)}>
+            <span className={`absolute left-2 right-2 h-px bg-current transition-transform duration-300 ${open ? 'top-[21px] rotate-45' : 'top-[17px]'}`} />
+            <span className={`absolute left-2 right-2 h-px bg-current transition-transform duration-300 ${open ? 'top-[21px] -rotate-45' : 'top-[26px]'}`} />
           </button>
         </div>
       </div>
@@ -189,7 +190,7 @@ export function Header() {
                   <ul className="mb-2 border-l border-white/15 pl-4">
                     {collections.map((c) => (
                       <li key={c.slug}>
-                        <NavLink to={c.to} className="flex items-baseline gap-3 py-2 text-lg aria-[current=page]:text-bronze-2">
+                        <NavLink to={c.to} className="flex min-h-11 items-center gap-3 text-lg aria-[current=page]:text-bronze-2">
                           <span className="label text-paper/40">{c.num}</span>
                           {c.name}
                         </NavLink>

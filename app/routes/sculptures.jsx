@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Seo } from '../components/Seo';
-import { DesignCard } from '../components/DesignCard';
+import { DesignGrid } from '../components/DesignGrid';
 import { Contact } from '../components/sections/Contact';
 import { LineHero, LineSpecs } from '../components/sections/LinePage';
 import { sculpturesHeroArt } from '../data/art';
@@ -14,7 +14,7 @@ function ScaleFigure({ size }) {
   const objectScale = (PX_PER_CM * size.objectCm) / 360;
   const motion = 'transform 0.8s cubic-bezier(0.65, 0, 0.35, 1)';
   return (
-    <svg viewBox="0 -10 240 400" className="lineart h-56 w-auto shrink-0 text-ink lg:h-auto lg:w-full" aria-hidden="true">
+    <svg viewBox="0 -10 240 400" className="lineart h-44 w-auto shrink-0 self-center text-ink sm:h-56 sm:self-auto lg:h-auto lg:w-full" aria-hidden="true">
       {/* the chosen range, highlighted on the ruler */}
       <rect
         x="14"
@@ -82,12 +82,15 @@ export default function Sculptures() {
 
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-[1400px] px-5 md:px-10">
-          <div className="grid gap-12 lg:grid-cols-[260px_1fr]">
-            <aside className="lg:sticky lg:top-24 lg:self-start">
+          <div className="grid grid-cols-1 gap-12 lg:grid-cols-[260px_minmax(0,1fr)]">
+            <aside className="min-w-0 lg:sticky lg:top-24 lg:self-start">
               <p className="label text-bronze">Filter by size</p>
-              <div className="mt-5 flex gap-6 lg:block">
+              {/* Phones: the figure on top, then one row of chips with the chosen range under it.
+                  640–1023px: figure beside the buttons. From 1024px: a sticky sidebar. */}
+              <div className="mt-5 flex flex-col gap-5 sm:flex-row sm:gap-6 lg:block">
                 <ScaleFigure size={size} />
-                <div className="flex flex-1 flex-col gap-2 lg:mt-6" role="radiogroup" aria-label="Filter by size">
+                <div className="flex flex-1 flex-col gap-2 lg:mt-6">
+                  <div className="no-scrollbar -mx-5 flex gap-2 overflow-x-auto px-5 sm:mx-0 sm:flex-col sm:overflow-visible sm:px-0" role="radiogroup" aria-label="Filter by size">
                   {sizes.map((s) => {
                     const on = s.key === sizeKey;
                     return (
@@ -97,30 +100,28 @@ export default function Sculptures() {
                         role="radio"
                         aria-checked={on}
                         onClick={() => setSizeKey(s.key)}
-                        className={`flex items-center justify-between rounded-full border px-5 py-3 text-left text-sm transition-colors ${
+                        className={`flex min-h-11 shrink-0 items-center justify-between gap-4 rounded-full border px-5 text-left text-sm whitespace-nowrap transition-colors ${
                           on ? 'border-ink bg-ink text-paper' : 'border-ink/15 hover:border-ink/50'
                         }`}
                       >
                         <span className="font-semibold">{s.label}</span>
-                        <span className={on ? 'text-paper/60' : 'text-stone'}>{s.range}</span>
+                        <span className={`hidden sm:inline ${on ? 'text-paper/60' : 'text-stone'}`}>{s.range}</span>
                       </button>
                     );
                   })}
-                  <p className="mt-2 text-xs leading-relaxed text-stone">Figure shown at 170 cm. Size groups are indicative — every design can be made to your size.</p>
+                  </div>
+                  <p className="text-sm font-semibold sm:hidden" aria-hidden="true">
+                    {size.label} <span className="font-normal text-stone">· {size.range}</span>
+                  </p>
+                  <p className="mt-1 text-xs leading-relaxed text-stone sm:mt-2">Figure shown at 170 cm. Size groups are indicative — every design can be made to your size.</p>
                 </div>
               </div>
             </aside>
-            <div>
+            <div className="min-w-0">
               <p className="mb-6 text-sm text-stone" aria-live="polite">
                 Showing <span className="font-semibold text-ink tabular-nums">{shown.length}</span> of {sculptures.length} designs
               </p>
-              <ul className="grid gap-x-6 gap-y-12 sm:grid-cols-2 xl:grid-cols-3">
-                {shown.map((d) => (
-                  <li key={d.code} className="animate-[fade-up_0.6s_cubic-bezier(0.22,1,0.36,1)_both]">
-                    <DesignCard d={d} sizes="(min-width: 1280px) 25vw, (min-width: 640px) 45vw, 100vw" />
-                  </li>
-                ))}
-              </ul>
+              <DesignGrid key={sizeKey} designs={shown} columns="sm:grid-cols-2 xl:grid-cols-3" sizes="(min-width: 1280px) 25vw, (min-width: 360px) 45vw, 100vw" />
             </div>
           </div>
         </div>

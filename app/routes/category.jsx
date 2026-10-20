@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router';
 import { Seo } from '../components/Seo';
-import { DesignCard } from '../components/DesignCard';
+import { DesignGrid } from '../components/DesignGrid';
 import { Contact } from '../components/sections/Contact';
 import { LineHero, LineSpecs } from '../components/sections/LinePage';
 import { lineHeroArt } from '../data/art';
@@ -24,13 +24,7 @@ export default function Category() {
           <p className="mb-6 text-sm text-stone">
             Showing <span className="font-semibold text-ink tabular-nums">{p.designs.length}</span> designs · every design can be made to your size and finish
           </p>
-          <ul className="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" data-reveal="stagger">
-            {p.designs.map((d) => (
-              <li key={d.code}>
-                <DesignCard d={d} sizes="(min-width: 1280px) 22vw, (min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw" />
-              </li>
-            ))}
-          </ul>
+          <DesignGrid designs={p.designs} columns="sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" sizes="(min-width: 1280px) 22vw, (min-width: 1024px) 30vw, (min-width: 360px) 45vw, 100vw" />
         </div>
       </section>
 

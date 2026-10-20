@@ -2,12 +2,36 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router';
 import { Img } from '../Img';
 import { collections } from '../../data/content';
+import { useReducedMotion } from '../../motion/useReducedMotion';
 
-/** One product line: on hover the card widens (desktop) and its three photos take turns. */
+/**
+ * One product line: on hover the card widens (desktop) and its three photos take turns. Touch screens have no
+ * hover, so there the photos take turns by themselves while the card is on screen (not under reduced motion).
+ */
 function CollectionCard({ c, eager }) {
   const [shown, setShown] = useState(0);
   const timer = useRef(null);
-  const start = () => {
+  const card = useRef(null);
+  const reduced = useReducedMotion();
+
+  useEffect(() => {
+    if (reduced || !window.matchMedia('(hover: none)').matches) return;
+    let t = null;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        clearInterval(t);
+        if (e.isIntersecting) t = setInterval(() => setShown((s) => (s + 1) % c.images.length), 2600);
+      },
+      { threshold: 0.6 },
+    );
+    io.observe(card.current);
+    return () => {
+      io.disconnect();
+      clearInterval(t);
+    };
+  }, [reduced, c.images.length]);
+  const start = (e) => {
+    if (e?.pointerType === 'touch') return;
     clearInterval(timer.current);
     timer.current = setInterval(() => setShown((s) => (s + 1) % c.images.length), 1100);
   };
@@ -19,9 +43,10 @@ function CollectionCard({ c, eager }) {
 
   return (
     <Link
+      ref={card}
       to={c.to ?? '/#collections'}
-      onMouseEnter={start}
-      onMouseLeave={stop}
+      onPointerEnter={start}
+      onPointerLeave={(e) => e.pointerType !== 'touch' && stop()}
       onFocus={start}
       onBlur={stop}
       className="group relative isolate block aspect-[4/3] overflow-hidden rounded-[var(--radius-card)] bg-ink text-paper transition-[flex-grow] duration-700 ease-[var(--ease-out-soft)] sm:aspect-[16/9] lg:aspect-auto lg:flex-1 lg:hover:flex-[2.1]"
@@ -65,7 +90,7 @@ export function Collections() {
           </div>
           <p className="max-w-sm text-ink/65">Five product lines, from statement sculptures to architectural GRC, each made to your design, size and finish.</p>
         </div>
-        <div className="flex flex-col gap-3 lg:h-[78vh] lg:min-h-[560px] lg:flex-row" data-reveal="up">
+        <div className="flex flex-col gap-3 lg:h-[min(78vh,760px)] lg:min-h-[560px] lg:flex-row" data-reveal="up">
           {collections.map((c, i) => (
             <CollectionCard key={c.slug} c={c} eager={i < 2} />
           ))}

@@ -9,7 +9,7 @@ const YEAR = new Date().getFullYear();
 export function Footer() {
   return (
     <footer className="bg-ink text-paper">
-      <div className="mx-auto grid max-w-[1400px] gap-12 px-5 py-20 md:grid-cols-[1.4fr_1fr_1fr_1.2fr] md:px-10">
+      <div className="mx-auto grid max-w-[1400px] gap-12 px-5 py-20 sm:grid-cols-2 md:px-10 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
         <div className="max-w-sm">
           <Logo />
           <p className="mt-6 text-sm leading-relaxed text-paper/60">
@@ -21,10 +21,10 @@ export function Footer() {
         </div>
         <div>
           <p className="label text-paper/40">Products</p>
-          <ul className="mt-5 space-y-3 text-sm text-paper/75">
+          <ul className="mt-4 space-y-1 text-sm text-paper/75 pointer-fine:mt-5 pointer-fine:space-y-3">
             {collections.map((c) => (
               <li key={c.slug}>
-                <Link to={c.to ?? '/#collections'} className="hover:text-paper">
+                <Link to={c.to ?? '/#collections'} className="inline-flex min-h-11 items-center hover:text-paper pointer-fine:min-h-0">
                   {c.name}
                 </Link>
               </li>
@@ -46,16 +46,16 @@ export function Footer() {
         </div>
         <div>
           <p className="label text-paper/40">Get in touch</p>
-          <ul className="mt-5 space-y-3 text-sm text-paper/75">
+          <ul className="mt-4 space-y-1 text-sm text-paper/75 pointer-fine:mt-5 pointer-fine:space-y-3">
             {site.phones.map((p) => (
               <li key={p.tel}>
-                <a href={`tel:${p.tel}`} className="hover:text-paper">
+                <a href={`tel:${p.tel}`} className="inline-flex min-h-11 items-center hover:text-paper pointer-fine:min-h-0">
                   {p.label}
                 </a>
               </li>
             ))}
             <li>
-              <a href={`mailto:${site.email}`} className="hover:text-paper">
+              <a href={`mailto:${site.email}`} className="inline-flex min-h-11 items-center hover:text-paper pointer-fine:min-h-0">
                 {site.email}
               </a>
             </li>
@@ -63,11 +63,11 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-[1400px] flex-col justify-between gap-2 px-5 py-6 text-xs text-paper/40 sm:flex-row md:px-10">
+        <div className="mx-auto flex max-w-[1400px] flex-col justify-between gap-2 px-5 py-6 pr-24 text-xs text-paper/40 sm:flex-row md:px-10 md:pr-24 xl:pr-10">
           <p>© {YEAR} Invent Fine Art. All rights reserved.</p>
           <p>
             Crafted by{' '}
-            <a href={site.credit.url} className="underline underline-offset-2 hover:text-paper">
+            <a href={site.credit.url} className="inline-flex min-h-11 items-center underline underline-offset-2 hover:text-paper pointer-fine:min-h-0">
               {site.credit.name}
             </a>
           </p>

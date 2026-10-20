@@ -24,6 +24,9 @@
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* Phones held sideways and other short screens */
+@custom-variant short (@media (max-height: 500px) and (orientation: landscape));
+
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;
@@ -104,6 +107,14 @@
   }
 }
 
+/* Horizontal swipe rows without a visible scrollbar */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 /* Client logo marquee */
 .marquee-track {
   animation: marquee 50s linear infinite;
@@ -164,9 +175,11 @@
     transition: stroke-dashoffset 1.2s var(--ease-out-soft) var(--d, 0s);
   }
 }
-.group:focus-within .draw-hover :where(path, circle, ellipse, rect, line, polyline, polygon) {
-  stroke-dashoffset: 0;
-  transition: stroke-dashoffset 1.2s var(--ease-out-soft) var(--d, 0s);
+@media (hover: hover) {
+  .group:focus-within .draw-hover :where(path, circle, ellipse, rect, line, polyline, polygon) {
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 1.2s var(--ease-out-soft) var(--d, 0s);
+  }
 }
 
 /* Lenis */
