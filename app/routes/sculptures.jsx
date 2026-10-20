@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Seo } from '../components/Seo';
 import { DesignCard } from '../components/DesignCard';
 import { Contact } from '../components/sections/Contact';
+import { LineHero, LineSpecs } from '../components/sections/LinePage';
 import { sculpturesHeroArt } from '../data/art';
 import { sculptures, sculpturesPage, sizes } from '../data/content';
 import { designsFor } from '../data/designs';
-import { useReducedMotion } from '../motion/useReducedMotion';
 
 const PX_PER_CM = 1.9; // the scale figure: 0–200 cm over 380 units
 
@@ -65,17 +65,9 @@ function ScaleFigure({ size }) {
 
 export default function Sculptures() {
   const [sizeKey, setSizeKey] = useState('all');
-  const [started, setStarted] = useState(false);
-  const reduced = useReducedMotion();
   const size = sizes.find((s) => s.key === sizeKey);
   const shown = sculptures.filter((d) => sizeKey === 'all' || d.size === sizeKey);
   const total = designsFor('sculptures').length;
-
-  // Draw the hero line drawing once the page is running.
-  useEffect(() => {
-    const t = requestAnimationFrame(() => setStarted(true));
-    return () => cancelAnimationFrame(t);
-  }, []);
 
   return (
     <>
@@ -85,45 +77,8 @@ export default function Sculptures() {
         image="gallery/sculptures/15"
       />
 
-      <section className="relative isolate overflow-hidden bg-ink pt-[72px] text-paper">
-        <div className="relative mx-auto flex min-h-[62svh] max-w-[1400px] flex-col items-center justify-center px-5 py-20 text-center md:px-10">
-          <svg
-            viewBox={sculpturesHeroArt.viewBox}
-            preserveAspectRatio="xMidYMax slice"
-            className="lineart draw absolute inset-x-0 bottom-0 -z-10 h-[85%] w-full text-paper/30"
-            aria-hidden="true"
-            data-on={started || reduced ? '' : undefined}
-            dangerouslySetInnerHTML={{ __html: sculpturesHeroArt.svg }}
-          />
-          <p className="label hero-fade text-bronze-2">01 — {total} designs</p>
-          <h1 className="mt-5 font-display text-[clamp(3.2rem,9vw,8rem)] leading-[0.95] font-light">
-            <span className="split-line">
-              <span>Sculptures</span>
-            </span>
-            <span className="split-line">
-              <span className="italic" style={{ '--i': 1 }}>
-                Collection
-              </span>
-            </span>
-          </h1>
-        </div>
-      </section>
-
-      <section className="border-b border-ink/10">
-        <div className="mx-auto grid max-w-[1400px] gap-8 px-5 py-14 md:grid-cols-[1.2fr_2fr] md:px-10">
-          <p className="font-display text-3xl leading-snug font-light md:text-4xl" data-reveal="up">
-            {sculpturesPage.intro} <span className="italic">{sculpturesPage.accent}</span>
-          </p>
-          <dl className="grid gap-6 sm:grid-cols-2" data-reveal="up">
-            {sculpturesPage.specs.map((s) => (
-              <div key={s.label} className="border-t border-ink/15 pt-4">
-                <dt className="label text-stone">{s.label}</dt>
-                <dd className="mt-2 text-sm leading-relaxed">{s.value}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-      </section>
+      <LineHero num="01" name="Sculptures" count={total} art={sculpturesHeroArt} />
+      <LineSpecs intro={sculpturesPage.intro} accent={sculpturesPage.accent} specs={sculpturesPage.specs} />
 
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-[1400px] px-5 md:px-10">

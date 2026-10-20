@@ -2,6 +2,7 @@
 // factory is in Nalasopara West (the old site's contact page), not "Vasai–Virar".
 // Values marked PROVISIONAL are the demo's own and are listed in CONTENT-GAPS.md for the client to confirm.
 import { designByCode, designsFor } from './designs';
+import { lineBySlug } from './lines';
 
 // Home hero
 export const hero = {
@@ -14,12 +15,12 @@ export const hero = {
 
 // "What we make": the five lines, three photos each (the card cycles them on hover).
 export const collections = [
-  { slug: 'sculptures', num: '01', name: 'Sculptures', tagline: 'Art that gives your space a distinctive identity', to: '/sculptures', images: ['gallery/sculptures/15', 'gallery/sculptures/13', 'gallery/sculptures/33'] },
+  { slug: 'sculptures', num: '01', name: 'Sculptures', tagline: 'Art that gives your space a distinctive identity', images: ['gallery/sculptures/15', 'gallery/sculptures/13', 'gallery/sculptures/33'] },
   { slug: 'designer-planters', num: '02', name: 'Designer Planters', tagline: 'Where nature meets design', images: ['gallery/planters/4', 'gallery/planters/2', 'gallery/planters/3'] },
   { slug: 'grc-products', num: '03', name: 'GRC Products', tagline: 'Architectural creativity, modern craftsmanship', images: ['gallery/grc_products/1', 'gallery/grc_products/2', 'gallery/grc_products/11'] },
   { slug: 'grc-grilles', num: '04', name: 'GRC Grilles', tagline: 'Distinctive patterns, timeless appeal', images: ['gallery/grc_products/5', 'gallery/grc_products/4', 'gallery/grc_products/6'] },
   { slug: 'frp-products', num: '05', name: 'FRP Products', tagline: 'Creative solutions, made to your brief', images: ['gallery/other_products/6', 'gallery/other_products/11', 'gallery/other_products/13'] },
-].map((c) => ({ ...c, count: designsFor(c.slug).length }));
+].map((c) => ({ ...c, to: `/${c.slug}`, count: designsFor(c.slug).length }));
 
 // A design card: the catalogue entry plus the demo's material label and line drawing (if any).
 // `material` and `size` are PROVISIONAL – confirm with client (the demo's own labels, not from the old site).
@@ -126,4 +127,33 @@ export const sculptures = [
   card('IFA-SC-049', 'Fibre', null, 'S'),
   card('IFA-SC-050', 'Fibre', null, 'M'),
   card('IFA-SC-058', 'Fibre', null, 'S'),
+];
+
+// The other four product-line pages (same layout as /sculptures). Headline: the brief's tagline, last words in
+// italic. Specs come from lines.js (the brief, and PROVISIONAL sizes). Every design in the line is shown; the four
+// featured ones keep their line drawing on hover.
+const DRAWN = { 'IFA-PL-001': 'faceted', 'IFA-PL-002': 'urn', 'IFA-GRC-001': 'facade', 'IFA-GRL-001': 'jali' };
+const page = (slug, intro, accent) => {
+  const l = lineBySlug[slug];
+  const material = l.materials.join(' · ');
+  return {
+    slug,
+    num: l.num,
+    name: l.name,
+    intro,
+    accent,
+    specs: [
+      { label: 'Suitable for', value: l.suitableFor.join(' · ') },
+      { label: 'Materials', value: material },
+      { label: 'Sizes', value: l.sizes },
+      { label: 'Finishes', value: 'Concrete grey · Sandstone · Matte colour · Metallic bronze · Custom' },
+    ],
+    designs: designsFor(slug).map((d) => card(d.code, d.detail && d.detail !== material ? `${material} · ${d.detail}` : material, DRAWN[d.code] ?? null)),
+  };
+};
+export const linePages = [
+  page('designer-planters', 'Where nature', 'meets design.'),
+  page('grc-products', 'Architectural creativity meets', 'modern craftsmanship.'),
+  page('grc-grilles', 'Distinctive patterns.', 'Timeless architectural appeal.'),
+  page('frp-products', 'Creative solutions.', 'Customized to your requirements.'),
 ];

@@ -16,6 +16,7 @@ so the client must confirm or correct them before launch.
 | 9 | Finishes | 5 names and colour swatches | `content.js` (finishes) |
 | 10 | WhatsApp number, enquiry email | +91 93232 10327, inventfineart.mum@gmail.com | `app/data/site.js` |
 | 11 | Logo | Pebble mark drawn from a 120 px file; need the vector logo | `app/data/art.js` (logoMark) |
-| 12 | Client list | 28 logos from the old site: still current, may we publish? | `app/data/clients.js` |
+| 12 | Planter sizes | Small 12–18 in · Medium 18–30 in · Large 30–48 in · Custom | `app/data/lines.js` |
+| 13 | Client list | 28 logos from the old site: still current, may we publish? | `app/data/clients.js` |
 
 **Corrected from the demo:** the factory is in **Nalasopara West** (old site's contact page), not "Vasai–Virar".

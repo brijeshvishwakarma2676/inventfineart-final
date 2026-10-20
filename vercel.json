@@ -71,12 +71,12 @@
     },
     {
       "source": "/planter.html",
-      "destination": "/",
+      "destination": "/designer-planters",
       "statusCode": 301
     },
     {
       "source": "/grc-products.html",
-      "destination": "/",
+      "destination": "/grc-products",
       "statusCode": 301
     },
     {
